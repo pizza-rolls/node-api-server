@@ -41,7 +41,7 @@ module.exports =
         routes: routesConfig,
 
         // Express instance {optional}
-        app: null // creates an express app if none provided
+        app: options.context.app // creates an express app if none provided
 
       })
 
