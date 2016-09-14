@@ -1,6 +1,6 @@
 var assert = require('assert')
 
-import Module from '../dist/bundle.js'
+const Module = require('../src/index.js')
 
 /* global describe, it */
 
