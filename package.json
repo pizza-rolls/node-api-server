@@ -1,5 +1,5 @@
 {
-  "name": "api-server",
+  "name": "node-api-server",
   "description": "ES2015+ Node.js API Server",
   "main": "src/index.js",
   "scripts": {
