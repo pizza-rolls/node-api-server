@@ -14,7 +14,7 @@ class MODULE {
 
     new Middleware({ context: this, options: options.middleware}) // eslint-disable-line
 
-    const routes = new Routes({ context: this }) // eslint-disable-line
+    const routes = new Routes({ context: this, baseRoute: options.baseRoute }) // eslint-disable-line
 
     const services = this.getServices(options.servicesDir || path.join(this.rootDir, 'services'))
 
