@@ -12,7 +12,6 @@
 
 # node-api-server
 
-
 ## Usage
 
 `npm install node-api-server`
