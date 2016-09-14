@@ -26,8 +26,7 @@
     "body-parser": "^1.15.2",
     "debug": "^2.2.0",
     "express": "^4.14.0",
-    "express-api-routes": "^1.1.2",
-    "jsonwebtoken": "^7.1.9",
+    "express-api-routes": "2.x",
     "winston": "^2.2.0"
   },
   "devDependencies": {
