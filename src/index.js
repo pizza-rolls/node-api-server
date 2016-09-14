@@ -12,11 +12,11 @@ class MODULE {
 
     const logger = new Logger({ context: this, level: 'silly' }) // eslint-disable-line
 
+    new Middleware({ context: this, options: options.middleware}) // eslint-disable-line
+
     const routes = new Routes({ context: this }) // eslint-disable-line
 
     const services = this.getServices(options.servicesDir || path.join(this.rootDir, 'services'))
-
-    new Middleware({ context: this, options: options.middleware}) // eslint-disable-line
 
     return {
       app: this.app,
