@@ -1,63 +1,107 @@
-const express = require('express')
-const fs = require('fs')
-const path = require('path')
-const Logger = require('./logger/logger')
-const Routes = require('./routes/routes')
-const Middleware = require('./middleware/middleware')
+/* global Log */
 
-class MODULE {
-  constructor (options = {}) {
-    this.app = options.app || express()
-    this.rootDir = options.rootDir || path.parse(process.mainModule.filename).dir
+module.exports = (setupCallback) => {
+  const utils = require('./utils')
 
-    const logger = new Logger({ context: this, level: 'silly' }) // eslint-disable-line
+  // dev only
+  // console.log('+++ Utils:')
+  // console.dir(utils)
+  // console.log('\n')
 
-    new Middleware({ context: this, options: options.middleware}) // eslint-disable-line
+  // instantiate Config
+  const config = new utils.config() // eslint-disable-line
 
-    const routes = new Routes({ context: this, baseRoute: options.baseRoute }) // eslint-disable-line
+  // dev only
+  // console.log('+++ Config:')
+  // console.dir(config)
+  // console.log('\n')
 
-    const services = this.getServices(options.servicesDir || path.join(this.rootDir, 'services'))
+  // setup logger
+  config.logger = new utils.logger(config.logger) // eslint-disable-line
 
-    return {
-      app: this.app,
-      logger: logger,
-      controllers: routes.controllers,
-      policies: routes.policies,
-      services: services
-    }
+  // setup server/app Object
+  const server = new utils.server(config.server, config.middleware) // eslint-disable-line
+
+  let api = {
+    policies: {},
+    controllers: {},
+    services: {},
+    routes: config.routes
   }
 
-  /**
-   * Retrieve all services modules & methods and return them in an object format
-   * for use.
-   */
-  getServices (dir) {
-    let _services = {}
-    let servicesDir
+  // read modules into memory: policies, services, controllers
+  // then: setup routes, controllers
+  Promise
+    .all([
+      utils.policies.loadPolicies(config.policies),
+      utils.services.loadServices(config.services),
+      utils.controllers.loadControllers(config.controllers)
+    ])
+    .then((all) => {
+      // assign all to api object outside this scope
+      api.policies = all[0]
+      api.services = all[1]
+      api.controllers = all[2]
 
-    try {
-      servicesDir = fs.statSync(dir)
-    } catch (e) { servicesDir = false }
-
-    if (!servicesDir || !servicesDir.isDirectory()) {
-      return _services
-    }
-
-    fs.readdirSync(dir).forEach((fileName) => {
-      if (!/(.js)$/.test(fileName)) {
-        return null
+      return {
+        server: server,
+        api: api
       }
+    })
+    .then(({server, api}) => {
+      return utils.routes.setupRoutes(server, api)
+    })
+    .then(({server, api}) => {
+      return utils.controllers.setupControllers(server, api)
+    })
+    .then(new Promise((resolve, reject) => {
+      server.mountRouter()
+      return resolve({server, api})
+    }))
+    .then(({server, api}) => {
+      // if there is any additional server setup to do, give a Promise
+      return new Promise((resolve, reject) => {
+        if (!setupCallback) return resolve()
 
-      const fileNamespace = fileName.replace('.js', '')
+        const callbackTimer = setTimeout(() => {
+          Log.error('The callback was never invoked to start the server')
+          Log.error('Stopping process...')
+          process.exit()
+        }, 20000)
 
-      _services[fileNamespace] = require(path.join(dir, fileName))
+        setupCallback({
+          api,
+          config
+        },
+          (...args) => {
+            clearTimeout(callbackTimer)
+            resolve(...args)
+          }
+        )
+      })
+    })
+    .then(setupComplete)
+    .catch((err) => {
+      throw new Error(err)
     })
 
-    return _services
+  // setup js-data-express
+
+  function setupComplete () {
+    // start the server
+    server.startServer()
+
+    // dev only
+    // console.log('+++ Server:')
+    // console.dir(`server started on port ${server.port}`)
+    // console.log('\n')
+
+    // if (config._args.interactive) {
+    //   const repl = require('repl')
+    //   Log.debug('Starting Interactive Mode:')
+    //   var replServer = repl.start({prompt: '> '})
+    //   replServer.context.config = config
+    //   replServer.context.api = api
+    // }
   }
 }
-
-/**
- * Export Our Module
- */
-module.exports = MODULE
