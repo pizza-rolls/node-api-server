@@ -4,14 +4,14 @@
  * Configuration for web server (express)
  */
 
-const express = require('express')
+// const express = require('express')
 
 module.exports = {
   // defaults to '/'
   baseRoute: '/',
 
   // defaults to express()
-  app: express(),
+  // app: express(),
 
   // defaults to 3000
   port: 3003 // also cli arg option

@@ -16,7 +16,8 @@ module.exports = {
   makePathFromRoot: (_path) => {
     let rootDir
     try {
-      rootDir = path.parse(process.mainModule.filename).dir
+      // we set __rootDir globally when we want to overwrite the 'rootDir' ie: testing w/ mocha
+      rootDir = global.__rootDir || path.parse(process.mainModule.filename).dir
     } catch (e) {
       rootDir = process.cwd()
     }

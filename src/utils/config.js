@@ -17,39 +17,40 @@ const utils = require('./utils')
  *    configDir <String> optional // defaults to root/config
  *  }
  */
-module.exports = class Config {
-  constructor (_config) {
-    // param passed into constructor during instantiation
-    this._config = _config || ({})
+module.exports =
+  class Config {
+    constructor (_config) {
+      // param passed into constructor during instantiation
+      this._config = _config || ({})
 
-    // command-line args
-    this._args = getCommandLineArgs()
+      // command-line args
+      this._args = getCommandLineArgs()
 
-    this.connections = {}
-    this.controllers = {}
-    this.datastore = {}
-    this.globals = {}
-    this.jwt = {}
-    this.logger = {}
-    this.middleware = {}
-    this.policies = {}
-    this.routes = {}
-    this.server = {}
-    this.services = {}
-    this.session = {}
-    this.sockets = {}
+      this.connections = {}
+      this.controllers = {}
+      this.datastore = {}
+      this.globals = {}
+      this.jwt = {}
+      this.logger = {}
+      this.middleware = {}
+      this.policies = {}
+      this.routes = {}
+      this.server = {}
+      this.services = {}
+      this.session = {}
+      this.sockets = {}
 
-    const definedConfigDir = path.join(path.parse(module.filename).dir, '../config')
+      const definedConfigDir = path.join(global.__rootDir || path.parse(process.mainModule.filename).dir, '/config')
 
-    const defaultConfigs = getDefaultConfigs()
-    const definedConfigs = getDefinedConfigs(definedConfigDir)
-    // merge configs - add default configs around definedConfigs
-    const mergedConfigs = defaultsDeep(definedConfigs, defaultConfigs)
+      const defaultConfigs = getDefaultConfigs()
+      const definedConfigs = getDefinedConfigs(definedConfigDir)
+      // merge configs - add default configs around definedConfigs
+      const mergedConfigs = defaultsDeep(definedConfigs, defaultConfigs)
 
-    Object.assign(this, mergedConfigs)
+      Object.assign(this, mergedConfigs)
 
-    return this
-  }
+      return this
+    }
 }
 
 /**
@@ -60,9 +61,9 @@ const getCommandLineArgs = () => {
   // get command-line args
   try {
     commander
-            .option('-p, --port [port]', 'Port Number')
-            .option('-i, --interactive [interactive]', 'Start in interactive mode')
-            .parse(process.argv)
+      .option('-p, --port [port]', 'Port Number')
+      .option('-i, --interactive [interactive]', 'Start in interactive mode')
+      .parse(process.argv)
   } catch (e) {
     console.log(new Error('commander cli failed'))
   }
@@ -74,7 +75,8 @@ const getCommandLineArgs = () => {
  * @return {object}
  */
 const getDefaultConfigs = () => {
-  return {}
+  const defaultsDir = path.join(path.parse(module.filename).dir, '../config')
+  return getDirConfigs(defaultsDir)
 }
 
 /**
@@ -90,12 +92,21 @@ const getDefinedConfigs = (configDir) => {
     _dir = configDir
   }
 
+  return getDirConfigs(_dir)
+}
+
+/**
+ * Return a hashmap of config files in a given directory
+ * @param  {string} dir
+ * @return {object}
+ */
+const getDirConfigs = (dir) => {
   let configFiles
 
   try {
-    configFiles = fs.readdirSync(_dir)
+    configFiles = fs.readdirSync(dir)
   } catch (e) {
-    console.log(new Error('config dir error getting config files at: ' + _dir))
+    console.log(new Error('config dir error getting config files at: ' + dir))
   }
 
   const hash = {}
@@ -104,7 +115,7 @@ const getDefinedConfigs = (configDir) => {
     if (!/\.js$/.test(f)) return
 
     const _fileName = f.replace('.js', '')
-    const modulePath = path.join(_dir, f)
+    const modulePath = path.join(dir, f)
     hash[_fileName] = require(modulePath)
   })
 
