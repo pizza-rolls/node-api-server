@@ -10,7 +10,7 @@ var express = require('express');
 
 module.exports = {
   // defaults to '/'
-  baseRoute: '/api',
+  baseRoute: '/',
 
   // defaults to express()
   app: express(),

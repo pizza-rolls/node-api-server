@@ -5,4 +5,6 @@
  *
  * Configuration for globals
  */
-module.exports = {};
+module.exports = {
+  // @TODO make all keys here globals
+};

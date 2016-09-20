@@ -49,7 +49,7 @@ module.exports = {
             console.log(new Error('policy does not exist: ' + policy))
           }))
         } else {
-          allRoutePolicy.push(policies.getPolicy(api.routes['*']))
+          allRoutePolicy.push(policies.getPolicy(api.policies, api.routes['*']))
         }
         server.router.use(allRoutePolicy)
       }
@@ -58,13 +58,14 @@ module.exports = {
       Object.keys(api.routes).forEach((route) => {
         if (route === '*') return
 
+        let _route = api.routes[route]
+
         try {
           // check if route/path should be block entirely
-          if (route === false) {
-            server.router.all(route, module.exports.blockedRouteHandler())
+          if (_route === false) {
+            return server.router.all(route, module.exports.blockedRouteHandler())
           }
 
-          let _route = api.routes[route]
           let _controller = api.routes[route].controller
           let _method = api.routes[route].method
           let _policies = api.routes[route].policies
@@ -122,7 +123,7 @@ module.exports = {
    */
   blockedRouteHandler: () => {
     return (req, res, next) => {
-      return res.statusCode(400).end('Blocked Endpoint')
+      return res.sendStatus(400)
     }
   },
 

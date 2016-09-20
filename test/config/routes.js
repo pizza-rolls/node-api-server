@@ -5,13 +5,15 @@
  */
 module.exports = {
   // Example: will apply to ALL routes
-  // '*': ['isLoggedIn', 'isAdmin']
+  '*': ['isLoggedIn'],
 
-  // '/auth': {
-  //   controller: 'auth',
-  //   method: 'index',
-  //   policies: 'isAdmin'
-  // },
+  '/blockedController/*': false,
+
+  '/auth': {
+    controller: 'auth',
+    method: 'methodOne',
+    policies: 'isAdmin'
+  }
   // policy string for this route
   // '/auth/isAdmin': 'isAdmin',
   // policy string for this route with a wildcard

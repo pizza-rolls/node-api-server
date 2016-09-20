@@ -6,7 +6,7 @@
  * Configuration for policies
  */
 module.exports = {
-  global: 'policies',
+  global: 'policies'
   // relative to the app.js/main.module file
-  dir: 'api/policies' // default
+  // dir: 'api/policies' // default
 };

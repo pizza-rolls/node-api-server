@@ -28,7 +28,8 @@ module.exports = function (setupCallback) {
     policies: {},
     controllers: {},
     services: {},
-    routes: config.routes
+    routes: config.routes,
+    server: server
   };
 
   // read modules into memory: policies, services, controllers
