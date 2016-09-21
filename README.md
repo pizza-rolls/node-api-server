@@ -14,3 +14,12 @@
 ## Usage
 
 `npm install node-api-server`
+
+
+```
+require('node-api-server')(({ server, config }, callback) => {
+  callback()
+})
+```
+
+Details coming soon...
