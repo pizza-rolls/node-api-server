@@ -36,13 +36,15 @@ module.exports = (setupCallback) => {
     .all([
       utils.policies.loadPolicies(config.policies),
       utils.services.loadServices(config.services),
+      utils.models.loadModels(config.models),
       utils.controllers.loadControllers(config.controllers)
     ])
     .then((all) => {
       // assign all to api object outside this scope
       api.policies = all[0]
       api.services = all[1]
-      api.controllers = all[2]
+      api.models = all[2]
+      api.controllers = all[3]
 
       return {
         server: server,

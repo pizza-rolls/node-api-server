@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src --out-dir compiled",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "standard src/** && npm run mocha",
+    "test": "standard src/**/* && npm run mocha",
     "mocha": "mocha test/Setup.js",
     "coverage": "nyc node_modules/mocha/bin/mocha test/Setup.js",
     "watch": "npm-watch"
