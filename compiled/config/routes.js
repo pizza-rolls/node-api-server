@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /*
   config/routes.js
@@ -7,6 +7,17 @@
  */
 module.exports = {
   // Example: will apply to ALL routes
-  '*': ['isLoggedIn', 'isAdmin']
+  // '*': ['isLoggedIn', 'isAdmin']
 
+  // '/auth': {
+  //   controller: 'auth',
+  //   method: 'index',
+  //   policies: 'isAdmin'
+  // },
+  // policy string for this route
+  // '/auth/isAdmin': 'isAdmin',
+  // policy string for this route with a wildcard
+  // '/auth/*': 'isLoggedIn',
+  // policy array for this route
+  // '/auth/both': ['isAdmin', 'isLoggedIn']
 };

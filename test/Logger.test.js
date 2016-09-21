@@ -1,23 +1,13 @@
 const assert = require('assert')
 
-const Module = require('../src/index.js')
+const winston = require('winston')
 
-/* global describe, it */
+describe('Logger.test.js', () => {
+  it('should instantiate a winston logger', () => {
+    assert.ok(config.logger instanceof winston.Logger)
+  })
 
-describe('Setup.test.js - Setup, & Invokation', () => {
-  // it('should export a function', () => {
-  //   assert.ok(typeof Module === 'function')
-  // })
-
-  // it('should return an Error if invoked without wrong args', function () {
-  //   assert.throws(
-  //     () => { Module('', {}) },
-  //     (err) => { return err instanceof Error },
-  //     'unexpected error'
-  //   )
-  // })
-  //
-  // it('should return `true` when invoked without rules and empty string', function () {
-  //   assert.ok(Module({}, ''))
-  // })
+  it('should use config.logger.global string to set a global var', () => {
+    assert.ok(global['myLoggerVar'] instanceof winston.Logger)
+  })
 })

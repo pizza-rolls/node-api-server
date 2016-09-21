@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
   res.set({
-    'isLoggedIn': true
+    'isAdmin': true
   })
   next()
 }

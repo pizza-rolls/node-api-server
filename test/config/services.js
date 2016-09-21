@@ -4,5 +4,5 @@
  * Configuration for services
  */
 module.exports = {
-  global: 'services'
+  global: 'myServices'
 }

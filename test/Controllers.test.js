@@ -46,4 +46,15 @@ describe('Controllers.test.js', () => {
         done()
       })
   })
+
+  it('should not mount a controller\'s method on the router if it has a route with policies', function (done) {
+    request(config.server.app)
+      .get('/auth/methodOne')
+      .expect(404)
+      .end((err, res) => {
+        if (err) throw err
+
+        done()
+      })
+  })
 })

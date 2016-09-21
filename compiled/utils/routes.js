@@ -51,7 +51,7 @@ module.exports = {
             console.log(new Error('policy does not exist: ' + policy));
           }));
         } else {
-          allRoutePolicy.push(policies.getPolicy(api.routes['*']));
+          allRoutePolicy.push(policies.getPolicy(api.policies, api.routes['*']));
         }
         server.router.use(allRoutePolicy);
       }
@@ -60,13 +60,14 @@ module.exports = {
       Object.keys(api.routes).forEach(function (route) {
         if (route === '*') return;
 
+        var _route = api.routes[route];
+
         try {
           // check if route/path should be block entirely
-          if (route === false) {
-            server.router.all(route, module.exports.blockedRouteHandler());
+          if (_route === false) {
+            return server.router.all(route, module.exports.blockedRouteHandler());
           }
 
-          var _route = api.routes[route];
           var _controller = api.routes[route].controller;
           var _method = api.routes[route].method;
           var _policies = api.routes[route].policies;
@@ -124,7 +125,7 @@ module.exports = {
    */
   blockedRouteHandler: function blockedRouteHandler() {
     return function (req, res, next) {
-      return res.statusCode(400).end('Blocked Endpoint');
+      return res.sendStatus(400);
     };
   },
 

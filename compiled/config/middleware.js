@@ -8,9 +8,11 @@
 var bodyParser = require('body-parser');
 
 // example custom middleware method
-var customLogger = function customLogger(req, res, next) {
-  console.log(req.method + ':: ' + req.path);
-  next();
-};
+// const customLogger = (req, res, next) => {
+//   console.log(`${req.method}:: ${req.path}`)
+//   next()
+// }
 
-module.exports = [bodyParser.urlencoded({ extended: true }), bodyParser.json(), customLogger];
+module.exports = [bodyParser.urlencoded({ extended: true }), bodyParser.json()
+// customLogger
+];

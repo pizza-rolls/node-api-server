@@ -12,6 +12,17 @@ const setupCallback = sinon.spy(({api, config}, callback) => {
   // setup our global api & config object that gets invoked from the module
   global.api = api
   global.config = config
+
+  // setup sinon.spys on controller methods & policy methods
+  Object.keys(api.controllers).forEach((c) => {
+    Object.keys(api.controllers[c]).forEach((m) => {
+      api.controllers[c][m] = sinon.spy(api.controllers[c][m])
+    })
+  })
+  Object.keys(api.policies).forEach((p) => {
+    api.policies[p] = sinon.spy(api.policies[p])
+  })
+
   callback()
 })
 
@@ -35,7 +46,7 @@ describe('Setup.js - Module Setup/Prep for Tests', () => {
 
   it('load all tests after setup is complete', () => {
     fs.readdirSync(__dirname).forEach((f) => {
-      if (!/\.js$/.test(f)) return
+      if (!/test\.js$/i.test(f)) return
       require(path.join(__dirname, f))
     })
   })

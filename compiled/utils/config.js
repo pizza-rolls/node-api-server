@@ -48,7 +48,7 @@ module.exports = function Config(_config) {
   this.session = {};
   this.sockets = {};
 
-  var definedConfigDir = path.join(path.parse(module.filename).dir, '../config');
+  var definedConfigDir = path.join(global.__rootDir || path.parse(process.mainModule.filename).dir, '/config');
 
   var defaultConfigs = getDefaultConfigs();
   var definedConfigs = getDefinedConfigs(definedConfigDir);
@@ -79,7 +79,8 @@ var getCommandLineArgs = function getCommandLineArgs() {
  * @return {object}
  */
 var getDefaultConfigs = function getDefaultConfigs() {
-  return {};
+  var defaultsDir = path.join(path.parse(module.filename).dir, '../config');
+  return getDirConfigs(defaultsDir);
 };
 
 /**
@@ -95,12 +96,21 @@ var getDefinedConfigs = function getDefinedConfigs(configDir) {
     _dir = configDir;
   }
 
+  return getDirConfigs(_dir);
+};
+
+/**
+ * Return a hashmap of config files in a given directory
+ * @param  {string} dir
+ * @return {object}
+ */
+var getDirConfigs = function getDirConfigs(dir) {
   var configFiles = void 0;
 
   try {
-    configFiles = fs.readdirSync(_dir);
+    configFiles = fs.readdirSync(dir);
   } catch (e) {
-    console.log(new Error('config dir error getting config files at: ' + _dir));
+    console.log(new Error('config dir error getting config files at: ' + dir));
   }
 
   var hash = {};
@@ -109,7 +119,7 @@ var getDefinedConfigs = function getDefinedConfigs(configDir) {
     if (!/\.js$/.test(f)) return;
 
     var _fileName = f.replace('.js', '');
-    var modulePath = path.join(_dir, f);
+    var modulePath = path.join(dir, f);
     hash[_fileName] = require(modulePath);
   });
 

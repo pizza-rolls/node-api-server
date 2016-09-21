@@ -1,23 +1,16 @@
 const assert = require('assert')
 
-const Module = require('../src/index.js')
-
-/* global describe, it */
-
 describe('Setup.test.js - Setup, & Invokation', () => {
-  // it('should export a function', () => {
-  //   assert.ok(typeof Module === 'function')
-  // })
+  it('should be attached to the global config object', () => {
+    assert.ok(global.api.server)
+  })
 
-  // it('should return an Error if invoked without wrong args', function () {
-  //   assert.throws(
-  //     () => { Module('', {}) },
-  //     (err) => { return err instanceof Error },
-  //     'unexpected error'
-  //   )
-  // })
-  //
-  // it('should return `true` when invoked without rules and empty string', function () {
-  //   assert.ok(Module({}, ''))
-  // })
+  it('should have an instance of express', () => {
+    assert.ok(global.api.server.app.use)
+    assert.ok(global.api.server.app._router)
+  })
+
+  it('should have started the app server', () => {
+    assert.ok(global.api.server._running)
+  })
 })

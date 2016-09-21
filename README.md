@@ -3,7 +3,6 @@
 
 [![Build Status](https://travis-ci.org/pizza-rolls/node-api-server.svg?branch=master)](https://travis-ci.org/pizza-rolls/node-api-server)
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-[![Code Climate](https://codeclimate.com/github/pizza-rolls/node-api-server/badges/gpa.svg)](https://codeclimate.com/github/pizza-rolls/node-api-server)
 
 [![forthebadge](https://img.shields.io/badge/Node.js-v6-orange.svg)](http://nodejs.org)
 

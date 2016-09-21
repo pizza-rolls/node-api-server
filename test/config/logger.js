@@ -5,7 +5,7 @@
  */
 module.exports = {
   // if set to string, will set global[string] = logger
-  global: 'Log',
+  global: 'myLoggerVar',
 
   // defaults to info
   level: 'silly'
