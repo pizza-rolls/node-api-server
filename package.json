@@ -1,6 +1,6 @@
 {
   "name": "node-api-server",
-  "description": "ES2015+ Node.js API Server ",
+  "description": "ES2015+ Nodejs API Server",
   "main": "compiled/index.js",
   "scripts": {
     "build": "babel src --out-dir compiled",
