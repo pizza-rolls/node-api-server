@@ -34,13 +34,21 @@ Create a directory structure like this:
   - models/
     - user.js
 - config/
+  - connections.js
   - controllers.js
-  - services.js
-  - routes.js
-  - policies.js
+  - globals.js
+  - logger.js
+  - middleware.js
   - models.js
+  - policies.js
+  - routes.js
+  - server.js
+  - services.js
+  - session.js
+  - socket.js
 - app.js
 
+// @TODO add readme.md for each directory and the optional configs that can be used
 
 This module will read all files in the api directories and read them into
 modules for use. You can set them globally with config files in the config directory.    
