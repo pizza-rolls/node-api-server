@@ -1,7 +1,6 @@
 {
   "name": "node-api-server",
   "description": "ES2015+ Node.js API Server",
-  "version": "0.0.0-semantic-release",
   "main": "compiled/index.js",
   "scripts": {
     "build": "babel src --out-dir compiled",
