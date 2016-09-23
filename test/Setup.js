@@ -27,12 +27,15 @@ const setupCallback = sinon.spy(({api, config}, callback) => {
 })
 
 describe('Setup.js - Module Setup/Prep for Tests', () => {
-  before(() => {
+  before((done) => {
     // set our rootDir that the module util looks for
     global.__rootDir = __dirname // here
 
     // runs before all tests in this block
-    Module(setupCallback)
+    Module((api, config, cb) => {
+      setupCallback(api, config, cb)
+      done()
+    })
   })
 
   it('should invoke the setup callback', () => {

@@ -71,7 +71,6 @@ module.exports = (setupCallback) => {
           Log.error('Stopping process...')
           process.exit()
         }, 20000)
-
         setupCallback({
           api,
           config
