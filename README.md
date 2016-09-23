@@ -22,4 +22,25 @@ require('node-api-server')(({ server, config }, callback) => {
 })
 ```
 
-Details coming soon...
+Create a directory structure like this:
+
+- api/
+  - controllers/
+    - myController.js
+  - services/
+    - utilService.js
+  - policies/
+    - isLoggedIn.js
+  - models/
+    - user.js
+- config/
+  - controllers.js
+  - services.js
+  - routes.js
+  - policies.js
+  - models.js
+- app.js
+
+
+This module will read all files in the api directories and read them into
+modules for use. You can set them globally with config files in the config directory.    
