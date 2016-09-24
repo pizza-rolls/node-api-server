@@ -21,7 +21,7 @@ files and modules and build `express` routes on your api server instance.
 `npm i -S node-api-server`
 
 
-```
+```js
 const nodeApiServer = require('node-api-server')
 
 nodeApiServer( (api, config, callback) => {
