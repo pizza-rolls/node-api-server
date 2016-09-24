@@ -20,6 +20,7 @@ module.exports = {
 
       utils.getDirFileNames(policiesDir)
         .then((files) => {
+          if (!files) return []
           return files.map((f) => {
             return path.join(policiesDir, f)
           })
