@@ -28,9 +28,7 @@ module.exports =
 
       this.connections = {}
       this.controllers = {}
-      this.datastore = {}
       this.globals = {}
-      this.jwt = {}
       this.logger = {}
       this.middleware = {}
       this.policies = {}
