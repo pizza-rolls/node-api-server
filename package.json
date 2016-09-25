@@ -1,6 +1,6 @@
 {
   "name": "node-api-server",
-  "description": "ES2015+ Node.js API Server",
+  "description": "ES2015+ Node.js API Server that creates automatic routes based on file structure complete with policy options",
   "main": "compiled/index.js",
   "scripts": {
     "build": "babel src --out-dir compiled",
