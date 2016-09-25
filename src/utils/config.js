@@ -4,11 +4,11 @@
  * Utils/Constructor for creating and setting up the config object
  */
 
-const fs = require('fs')
 const path = require('path')
 const commander = require('commander')
 const { defaultsDeep } = require('lodash')
 const utils = require('./utils')
+const modules = require('./modules')
 
 /**
  * Constructor for an app config object - Only creates a config object and returns
@@ -38,7 +38,7 @@ module.exports =
       this.session = {}
       this.sockets = {}
 
-      const definedConfigDir = path.join(global.__rootDir || path.parse(process.mainModule.filename).dir, '/config')
+      const definedConfigDir = _config.configDir
 
       const defaultConfigs = getDefaultConfigs()
       const definedConfigs = getDefinedConfigs(definedConfigDir)
@@ -99,23 +99,6 @@ const getDefinedConfigs = (configDir) => {
  * @return {object}
  */
 const getDirConfigs = (dir) => {
-  let configFiles
-
-  try {
-    configFiles = fs.readdirSync(dir)
-  } catch (e) {
-    console.log(new Error('config dir error getting config files at: ' + dir))
-  }
-
   const hash = {}
-
-  configFiles.forEach((f) => {
-    if (!/\.js$/.test(f)) return
-
-    const _fileName = f.replace('.js', '')
-    const modulePath = path.join(dir, f)
-    hash[_fileName] = require(modulePath)
-  })
-
-  return hash
+  return modules.loadDirFilesAsModules(dir, hash)
 }

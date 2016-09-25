@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-describe('Setup.test.js - Setup, & Invokation', () => {
+describe('Server.test.js - Setup, & Invokation', () => {
   it('should be attached to the global config object', () => {
     assert.ok(global.api.server)
   })

@@ -8,6 +8,35 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = {
+
+  isFile: (_path) => {
+    let returnVal = false
+    let fstat
+    try {
+      fstat = fs.statSync(_path)
+    } catch (e) {}
+
+    if (fstat) {
+      returnVal = fstat.isFile()
+    }
+
+    return returnVal
+  },
+
+  isDirectory: (_path) => {
+    let returnVal = false
+    let fstat
+
+    try {
+      fstat = fs.statSync(_path)
+    } catch (e) {}
+
+    if (fstat) {
+      returnVal = fstat.isDirectory()
+    }
+    return returnVal
+  },
+
   /**
    * Make an absolute path relative to the root dir/app
    * @param  {string} path path to append to root path
@@ -44,5 +73,22 @@ module.exports = {
         )
       })
     })
+  },
+
+  /**
+   * Get list of filenames in directory (.js only)
+   * @param  {string} dir path
+   * @return {Array} files list
+   */
+  getDirFileNamesSync: (dir) => {
+    let files = []
+
+    try {
+      files = fs.readdirSync(dir)
+    } catch (e) {
+      throw new Error(e)
+    }
+
+    return files
   }
 }

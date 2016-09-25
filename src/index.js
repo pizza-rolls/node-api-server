@@ -1,10 +1,18 @@
 /* global Log */
 
+const path = require('path')
+const utils = require('./utils')
+
 module.exports = (setupCallback) => {
-  const utils = require('./utils')
+  // app root directory @TODO make cli arg to set root dir
+  const _rootDir = path.join(global.__rootDir || path.parse(process.mainModule.filename).dir)
+  // @TODO make cli arg to set config dir
+  const _configDir = path.join(_rootDir, '/config')
+  // @TODO make cli arg to set api dir
+  const _apiDir = path.join(_rootDir, '/api')
 
   // instantiate Config
-  const config = new utils.config() // eslint-disable-line
+  const config = new utils.config({ configDir: _configDir }) // eslint-disable-line
 
   // setup logger
   config.logger = new utils.logger(config.logger) // eslint-disable-line
@@ -12,29 +20,18 @@ module.exports = (setupCallback) => {
   // setup server/app Object
   const server = new utils.server(config.server, config.middleware) // eslint-disable-line
 
-  let api = {
-    policies: {},
-    controllers: {},
-    services: {},
+  // load api dir modules into memory
+  const api = {
     routes: config.routes,
     server: server
   }
+  utils.modules.loadDirFilesAsModules(_apiDir, api)
 
-  // read modules into memory: policies, services, controllers
-  // then: setup routes, controllers
+  // setup routes, controllers
   Promise
-    .all([
-      utils.policies.loadPolicies(config.policies),
-      utils.services.loadServices(config.services),
-      utils.models.loadModels(config.models),
-      utils.controllers.loadControllers(config.controllers)
-    ])
-    .then((all) => {
-      // assign all to api object outside this scope
-      api.policies = all[0]
-      api.services = all[1]
-      api.models = all[2]
-      api.controllers = all[3]
+    .all([])
+    .then(() => {
+      utils.globals.setupGlobals({ config: config, api: api })
 
       return {
         server: server,
