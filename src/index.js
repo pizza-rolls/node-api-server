@@ -1,5 +1,3 @@
-/* global Log */
-
 const path = require('path')
 const utils = require('./utils')
 
