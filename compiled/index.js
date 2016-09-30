@@ -2,21 +2,19 @@
 
 /* global Log */
 
-module.exports = function (setupCallback) {
-  var utils = require('./utils');
+var path = require('path');
+var utils = require('./utils');
 
-  // dev only
-  // console.log('+++ Utils:')
-  // console.dir(utils)
-  // console.log('\n')
+var initMethod = function initMethod(setupCallback) {
+  // app root directory @TODO make cli arg to set root dir
+  var _rootDir = path.join(global.__rootDir || path.parse(process.mainModule.filename).dir);
+  // @TODO make cli arg to set config dir
+  var _configDir = path.join(_rootDir, '/config');
+  // @TODO make cli arg to set api dir
+  var _apiDir = path.join(_rootDir, '/api');
 
   // instantiate Config
-  var config = new utils.config(); // eslint-disable-line
-
-  // dev only
-  // console.log('+++ Config:')
-  // console.dir(config)
-  // console.log('\n')
+  var config = new utils.config({ configDir: _configDir }); // eslint-disable-line
 
   // setup logger
   config.logger = new utils.logger(config.logger); // eslint-disable-line
@@ -24,21 +22,16 @@ module.exports = function (setupCallback) {
   // setup server/app Object
   var server = new utils.server(config.server, config.middleware); // eslint-disable-line
 
+  // load api dir modules into memory
   var api = {
-    policies: {},
-    controllers: {},
-    services: {},
     routes: config.routes,
     server: server
   };
+  utils.modules.loadDirFilesAsModules(_apiDir, api);
 
-  // read modules into memory: policies, services, controllers
-  // then: setup routes, controllers
-  Promise.all([utils.policies.loadPolicies(config.policies), utils.services.loadServices(config.services), utils.controllers.loadControllers(config.controllers)]).then(function (all) {
-    // assign all to api object outside this scope
-    api.policies = all[0];
-    api.services = all[1];
-    api.controllers = all[2];
+  // setup routes, controllers
+  Promise.all([]).then(function () {
+    utils.globals.setupGlobals({ config: config, api: api });
 
     return {
       server: server,
@@ -70,7 +63,6 @@ module.exports = function (setupCallback) {
         Log.error('Stopping process...');
         process.exit();
       }, 20000);
-
       setupCallback({
         api: api,
         config: config
@@ -83,23 +75,12 @@ module.exports = function (setupCallback) {
     throw new Error(err);
   });
 
-  // setup js-data-express
-
   function setupComplete() {
     // start the server
     server.startServer();
-
-    // dev only
-    // console.log('+++ Server:')
-    // console.dir(`server started on port ${server.port}`)
-    // console.log('\n')
-
-    // if (config._args.interactive) {
-    //   const repl = require('repl')
-    //   Log.debug('Starting Interactive Mode:')
-    //   var replServer = repl.start({prompt: '> '})
-    //   replServer.context.config = config
-    //   replServer.context.api = api
-    // }
   }
 };
+
+initMethod.version = require('../package.json').version;
+
+module.exports = initMethod;

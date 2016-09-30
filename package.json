@@ -11,6 +11,7 @@
     "watch": "npm-watch"
   },
   "watch": {
+    "build": "{src}/**/*.js",
     "mocha": "{src,test}/**/*.js"
   },
   "repository": {

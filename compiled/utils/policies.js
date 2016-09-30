@@ -21,6 +21,7 @@ module.exports = {
       var policiesDir = utils.makePathFromRoot(config.dir || policiesDirDefault);
 
       utils.getDirFileNames(policiesDir).then(function (files) {
+        if (!files) return [];
         return files.map(function (f) {
           return path.join(policiesDir, f);
         });

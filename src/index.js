@@ -3,7 +3,7 @@
 const path = require('path')
 const utils = require('./utils')
 
-module.exports = (setupCallback) => {
+const initMethod = (setupCallback) => {
   // app root directory @TODO make cli arg to set root dir
   const _rootDir = path.join(global.__rootDir || path.parse(process.mainModule.filename).dir)
   // @TODO make cli arg to set config dir
@@ -79,3 +79,7 @@ module.exports = (setupCallback) => {
     server.startServer()
   }
 }
+
+initMethod.version = require('../package.json').version
+
+module.exports = initMethod

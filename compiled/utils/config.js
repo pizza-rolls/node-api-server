@@ -8,7 +8,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Utils/Constructor for creating and setting up the config object
  */
 
-var fs = require('fs');
 var path = require('path');
 var commander = require('commander');
 
@@ -17,6 +16,7 @@ var _require = require('lodash');
 var defaultsDeep = _require.defaultsDeep;
 
 var utils = require('./utils');
+var modules = require('./modules');
 
 /**
  * Constructor for an app config object - Only creates a config object and returns
@@ -36,9 +36,7 @@ module.exports = function Config(_config) {
 
   this.connections = {};
   this.controllers = {};
-  this.datastore = {};
   this.globals = {};
-  this.jwt = {};
   this.logger = {};
   this.middleware = {};
   this.policies = {};
@@ -48,7 +46,7 @@ module.exports = function Config(_config) {
   this.session = {};
   this.sockets = {};
 
-  var definedConfigDir = path.join(global.__rootDir || path.parse(process.mainModule.filename).dir, '/config');
+  var definedConfigDir = _config.configDir;
 
   var defaultConfigs = getDefaultConfigs();
   var definedConfigs = getDefinedConfigs(definedConfigDir);
@@ -105,23 +103,6 @@ var getDefinedConfigs = function getDefinedConfigs(configDir) {
  * @return {object}
  */
 var getDirConfigs = function getDirConfigs(dir) {
-  var configFiles = void 0;
-
-  try {
-    configFiles = fs.readdirSync(dir);
-  } catch (e) {
-    console.log(new Error('config dir error getting config files at: ' + dir));
-  }
-
   var hash = {};
-
-  configFiles.forEach(function (f) {
-    if (!/\.js$/.test(f)) return;
-
-    var _fileName = f.replace('.js', '');
-    var modulePath = path.join(dir, f);
-    hash[_fileName] = require(modulePath);
-  });
-
-  return hash;
+  return modules.loadDirFilesAsModules(dir, hash);
 };
