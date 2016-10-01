@@ -63,6 +63,11 @@ module.exports = {
    */
   getDirFileNames: (dir) => {
     return new Promise((resolve, reject) => {
+      if (!module.exports.isDirectory(dir)) {
+        console.log('No directory exists: ' + dir)
+        return resolve([])
+      }
+
       fs.readdir(dir, (err, files) => {
         if (err) return reject(err)
         return resolve(
@@ -82,6 +87,11 @@ module.exports = {
    */
   getDirFileNamesSync: (dir) => {
     let files = []
+
+    if (!module.exports.isDirectory(dir)) {
+      console.log('No directory exists: ' + dir)
+      return files
+    }
 
     try {
       files = fs.readdirSync(dir)

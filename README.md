@@ -166,7 +166,7 @@ ready to go
 All `.js` files in the config directory are loaded as modules and available on
 the `config` object in the callback. _See below for config files use and options_
 
-# Config
+# Config (optional)
 
 Config files are used to over-ride default `node-api-server` configuration and also
 provide helper/util meta info for your API. There are no required config files to
