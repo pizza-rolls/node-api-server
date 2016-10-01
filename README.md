@@ -24,14 +24,15 @@ files and modules and build `express` routes on your api server instance.
 ```js
 const nodeApiServer = require('node-api-server')
 
-nodeApiServer( (api, config, callback) => {
-  // "api" & "config" objects are passed as params
-  // for use to do any additional tasks here
+nodeApiServer( (nodeApiServer, startServer) => {
+  // nodeApiServer.api => object
+  // nodeApiServer.config => object
+  //  @NOTE: for use to do any additional tasks here
 
   // ...setup models/datastore, assign globals, etc.
 
   // be sure to invoke the callback or the server won't start
-  callback()
+  startServer()
 })
 ```
 

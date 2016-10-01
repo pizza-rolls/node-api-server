@@ -14,7 +14,6 @@ const initMethod = (setupCallback) => {
 
   // setup logger
   config.logger = new utils.logger(config.logger) // eslint-disable-line
-
   // setup server/app Object
   const server = new utils.server(config.server, config.middleware) // eslint-disable-line
 
@@ -56,6 +55,7 @@ const initMethod = (setupCallback) => {
           Log.error('Stopping process...')
           process.exit()
         }, 20000)
+
         setupCallback({
           api,
           config
